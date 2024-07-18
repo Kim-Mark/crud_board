@@ -18,6 +18,10 @@ public class BoardDto {
     private int boardHits; // 조회수
     private String createdAt; // 작성시간
 
+    public BoardDto(){
+
+    }
+
     public BoardDto(Long id, String boardWriter, String boardPass, String boardTitle, String boardContents, int boardHits, String createdAt) {
         this.id = id;
         this.boardWriter = boardWriter;
