@@ -16,7 +16,8 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService; // Controller는 Service를 참조함.
 
-    @Autowired
+    // 생성자
+    @Autowired // spring이 boardservice 객체를 자동으로 주입하도록
     public BoardController(BoardService boardService) {
         this.boardService = boardService;
     }
@@ -28,13 +29,13 @@ public class BoardController {
     }
 
     // 2. 글을 다 작성했으면 Controller로 data 넘겨주기
-    @PostMapping("/save")
-    public String save(@ModelAttribute BoardDto boardDto){
+    @PostMapping("/save") // http post요청이 save로 들어올떄
+    public String save(@ModelAttribute BoardDto boardDto){ //html폼에서 전달된 data를 boardDto 객체에 매핑
         // 파라미터로 정의한 BoardDto클래스를 가지는 매개변수를 객체로 받아서
         // html에서 전달한 data와 dto의 필드 이름이 동일한지 확인하고 setter가 있으면
         // 자동으로 그 값을 boardDto에 담아줌
         System.out.println("BoardDto = " + boardDto);
-        boardService.save(boardDto);
+        boardService.save(boardDto);//서비스 레이어를 통해 db에 게시글 저장
         // 게시글을 작성했으면 다시 목록으로 갈 거임 - redirect 활용
         return "redirect:/list";
     }
@@ -43,16 +44,16 @@ public class BoardController {
     // Model 객체는 Springframework에서 제공하는 인터페이스
     // db에서 data 가져올 때는 Model 사용
     @GetMapping("/list")
-    public String findAll(Model model){
-        List<BoardDto> boardDtoList = boardService.findAll();
-        model.addAttribute("boardList", boardDtoList);
+    public String findAll(Model model){//Model 객체를 사용해서 controller에서 뷰로 데이터 전달 
+        List<BoardDto> boardDtoList = boardService.findAll(); //서비스 레이어를 통해 모든 게시글 가져오기
+        model.addAttribute("boardList", boardDtoList); // 가져온 게시글 목록을 model에 추가하여 뷰에 전달
         System.out.println("boardDto list: " + boardDtoList);
         return "list";
     }
 
     // 4. 게시글 조회 클래스 구현
     @GetMapping("/{id}")
-    public String findById(@PathVariable("id") Long id, Model model){
+    public String findById(@PathVariable("id") Long id, Model model){//URL 경로에서 id 값을 추출하여 메소드 파라미터로 전달합니다.
         // 조회수 처리
         boardService.updateHits(id);
 
@@ -70,8 +71,11 @@ public class BoardController {
 
     // 1. 화면에 수정할 게시글 db 에서 한 번 받아오기
     @GetMapping("/update/{id}")
-    public String update(@PathVariable("id") Long id, Model model){
+    public String update(@PathVariable("id") Long id, Model model) throws IllegalAccessException {
         BoardDto boardDto = boardService.findById(id);
+        if(boardDto == null){
+            throw new IllegalAccessException("Invalid board ID: " + id);
+        }
         model.addAttribute("board", boardDto);
         return "update";
     }
@@ -79,10 +83,11 @@ public class BoardController {
     // 2. 수정 요청 받아주는 메소드, 수정 후 업데이트가 끝나면 수정된 결과가 나타나는 상세화면 다시 출력
     // 수정 후 data가 새로 업데이트 됨. db에서 그 data를 다시 꺼냐오는 과정
     @PostMapping("/update/{id}")
-    public String update(BoardDto boardDto, Model model){
+    public String update(@PathVariable("id") Long id, BoardDto boardDto, Model model){
+        boardDto.setId(id);
         boardService.update(boardDto);
-        BoardDto dto = boardService.findById(boardDto.getId());
-        model.addAttribute("board", dto);
+        BoardDto dto = boardService.findById(boardDto.getId()); // 수정된 게시글 다시 조회
+        model.addAttribute("board", dto);// 수정된 게시글 data를 모델에 추가하여 뷰에 전달
         return "detail";
     }
 

@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Getter
 @Setter
 @ToString
@@ -16,13 +19,13 @@ public class BoardDto {
     private String boardTitle; // 제목
     private String boardContents; // 내용
     private int boardHits; // 조회수
-    private String createdAt; // 작성시간
+    private LocalDateTime createdAt; // 작성시간
 
     public BoardDto(){
 
     }
 
-    public BoardDto(Long id, String boardWriter, String boardPass, String boardTitle, String boardContents, int boardHits, String createdAt) {
+    public BoardDto(Long id, String boardWriter, String boardPass, String boardTitle, String boardContents, int boardHits, LocalDateTime createdAt) {
         this.id = id;
         this.boardWriter = boardWriter;
         this.boardPass = boardPass;
@@ -32,6 +35,7 @@ public class BoardDto {
         this.createdAt = createdAt;
     }
 
+    /*
     // Getter and Setter methods
     public Long getId() {
         return id;
@@ -80,13 +84,16 @@ public class BoardDto {
     public void setBoardHits(int boardHits) {
         this.boardHits = boardHits;
     }
-
+ */
     public String getCreatedAt() {
-        return createdAt;
+        if(createdAt != null){
+            return createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }
+        return null;
     }
 
     public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
+        this.createdAt = LocalDateTime.parse(createdAt, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
 }

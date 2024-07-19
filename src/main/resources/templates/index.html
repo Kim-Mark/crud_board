@@ -1,12 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bulletin Board</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            box-shadow: 0 4px 2px -2px gray;
+        }
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h2 {
+            color: #4CAF50;
+            text-align: center;
+        }
+        .link-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        a {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 10px 20px;
+            color: white;
+            background-color: #4CAF50;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        a:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-<h2>Hello Spring!!</h2>
-<a href="/save">글작성</a>
-<a href="/list">글목록</a>
+<header>
+    <h1>My Bulletin Board</h1>
+</header>
+<main>
+    <h2>Hello Spring!!</h2>
+    <div class="link-container">
+        <a href="/save">글작성</a>
+        <a href="/list">글목록</a>
+        <a th:href="@{/update/{id}(id=${someId})}">글수정</a>
+    </div>
+</main>
 </body>
 </html>

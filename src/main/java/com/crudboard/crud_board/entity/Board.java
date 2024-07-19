@@ -1,10 +1,9 @@
 package com.crudboard.crud_board.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -18,13 +17,18 @@ public class Board {
     private String boardTitle; // 제목
     private String boardContents; // 내용
     private int boardHits; // 조회수
-    private String createdAt; // 작성시간
+    @Column(updatable = false)
+    private LocalDateTime createdAt; // 작성시간
 
+    @PrePersist
+    protected void onCreate(){
+        createdAt = LocalDateTime.now();
+    }
     // 기본 생성자
     public Board() {}
 
     // 생성자
-    public Board(Long id, String boardWriter, String boardPass, String boardTitle, String boardContents, int boardHits, String createdAt) {
+    public Board(Long id, String boardWriter, String boardPass, String boardTitle, String boardContents, int boardHits, LocalDateTime createdAt) {
         this.id = id;
         this.boardWriter = boardWriter;
         this.boardPass = boardPass;
@@ -83,11 +87,11 @@ public class Board {
         this.boardHits = boardHits;
     }
 
-    public String getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 

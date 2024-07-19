@@ -10,11 +10,23 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 @Service
 public class BoardService {
 
     @Autowired
     private BoardRepository boardRepository;
+
+    public BoardService(){  //
+
+    }
+
+    public BoardService(BoardRepository boardRepository) {  //
+        this.boardRepository = boardRepository;
+    }
+
+
 
     // 게시글 저장
     public void save(BoardDto boardDto) {
@@ -25,7 +37,7 @@ public class BoardService {
         board.setBoardTitle(boardDto.getBoardTitle());
         board.setBoardContents(boardDto.getBoardContents());
         board.setBoardHits(boardDto.getBoardHits());
-        board.setCreatedAt(boardDto.getCreatedAt());
+        //board.setCreatedAt(boardDto.getCreatedAt());
         // 데이터베이스에 저장
         boardRepository.save(board);
     }
@@ -67,8 +79,10 @@ public class BoardService {
             board.setBoardTitle(boardDto.getBoardTitle());
             board.setBoardContents(boardDto.getBoardContents());
             board.setBoardHits(boardDto.getBoardHits());
-            board.setCreatedAt(boardDto.getCreatedAt());
+            //board.setCreatedAt(boardDto.getCreatedAt());
             boardRepository.save(board);
+        }else{
+            throw new RuntimeException("Board not found with id" + boardDto.getId());
         }
     }
 

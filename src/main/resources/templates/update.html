@@ -1,59 +1,61 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>detail</title>
+    <title>글수정</title>
     <style>
-        table, tr, td, th {
-            border: 1px solid black;
-            border-collapse: collapse;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
         }
-        th, td {
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .form-container h2 {
+            margin-bottom: 20px;
+        }
+        .form-container input,
+        .form-container textarea {
+            width: calc(100% - 20px);
             padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-container input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .form-container input[type="submit"]:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-<table>
-    <tr>
-        <th>id</th>
-        <td th:text="${board.id}"></td>
-    </tr>
-    <tr>
-        <th>title</th>
-        <td th:text="${board.boardTitle}"></td>
-    </tr>
-    <tr>
-        <th>writer</th>
-        <td th:text="${board.boardWriter}"></td>
-    </tr>
-    <tr>
-        <th>date</th>
-        <td th:text="${board.createdAt}"></td>
-    </tr>
-    <tr>
-        <th>hits</th>
-        <td th:text="${board.boardHits}"></td>
-    </tr>
-    <tr>
-        <th>contents</th>
-        <td th:text="${board.boardContents}"></td>
-    </tr>
-</table>
-<button onclick="listReq()">목록</button>
-<button onclick="updateReq()">수정</button>
-<button onclick="deleteReq()">삭제</button>
-
+<div class="form-container">
+    <h2>글 수정</h2>
+    <form th:action="@{/update/{id}(id=${board.id})}" method="post">
+        <input type="hidden" th:value="${board.id}" />
+        <label for="boardTitle">제목:</label>
+        <input type="text" id="boardTitle" name="boardTitle" th:value="${board.boardTitle}" required>
+        <label for="boardWriter">작성자:</label>
+        <input type="text" id="boardWriter" name="boardWriter" th:value="${board.boardWriter}" required>
+        <label for="boardPass">비밀번호:</label>
+        <input type="text" id="boardPass" name="boardPass" th:value="${board.boardPass}" required>
+        <label for="boardContents">내용:</label>
+        <textarea id="boardContents" name="boardContents" th:text="${board.boardContents}" rows="10" required></textarea>
+        <input type="submit" value="수정">
+    </form>
+</div>
 </body>
-<script th:inline="javascript">
-    const listReq = () => {
-        location.href = "/list";
-    }
-    const updateReq = () => {
-        location.href = `/update/[[${board.id}]]`;
-    }
-    const deleteReq = () => {
-        location.href = `/delete/[[${board.id}]]`;
-    }
-</script>
 </html>
